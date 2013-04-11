@@ -1,0 +1,39 @@
+{
+  "name": "xtendme",
+  "author": {
+    "name": "Dean Mao",
+    "email": "deanmao@gmail.com"
+  },
+  "description": "xtendme",
+  "version": "0.1.3",
+  "dependencies": {
+    "express": "2.5.8",
+    "request": "2.9.202",
+    "eyes": "0.1.7",
+    "vows": "0.6.2",
+    "optimist": "0.3.4",
+    "coffee-script": "1.3.1",
+    "modul8": "0.16.0",
+    "mongoose": "2.6.3",
+    "connect-mongodb": "1.1.3",
+    "bufferstream": "0.5.1",
+    "uglify-js": "1.2.6",
+    "directory-tree-watcher": "0.0.5",
+    "buffertools": "1.0.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/deanmao/xtend.git"
+  },
+  "engines": {
+    "node": ">= 0.6"
+  },
+  "readme": "Xtend Overview\n==============\n\nThis is a basic connect module that will rewrite html & js so that it can be served from \na different domain.  For example, you can proxy maps.google.com to run under \nmaps.yourdomain.com.  It works by rewriting all urls to originate from yourdomain.com, and\nall requests to maps.google.com would route through yourdomain.com.\n\nThis module is not yet ready for public release (so you can't npm install it yet).  But\nyou are more than welcome to give it a run if you can figure out how to install it.\n\n### Basics:\n\nFirst, forward your local ports 80 & 443 to 3000 and 3443 respectively\nlike this:\n\n    ipfw add 100 fwd 127.0.0.1,3000 tcp from any to me 80\n    ipfw add 101 fwd 127.0.0.1,3443 tcp from any to me 443\n\nSee this guide on making self-signed ssl certs always trust:\n\nhttp://www.robpeck.com/2010/10/google-chrome-mac-os-x-and-self-signed-ssl-certificates/\n\nType this to start the proxy server:\n\n    cake run\n\nOne can access a site via *.myapp.dev via the following heuristic:\nA url like www.google.com becomes www-google-com.myapp.dev in our\nsystem.\n\n### app.coffee\n\nExpress server that has 2 routes:  '/x_t_n_d/:name' and '*'.  The first\nroute is used to serve up the client side js that contains all the\nrewriters & parsers, the second is for the actual proxying.\n\nThe proxy serves up a response by piping it through ProxyStream from\nnode-request.  ProxyStream will be the candidate for dealing with\nheaders & cookies, it currently messes with html & js and does a\npassthrough when the content is binary.\n\n### browser.coffee\n\nThis is the entry point for modul8 for converting all client-side js\ninto a single file.  Here we will initialize parameters specific to the\nbrowser client.\n\n### property_tester.coffee\n\nThis is mainly a utility script for testing strings of values against a\nset of predefined property sets.  Basically we use this to determine if\na method/attribute requires processing.\n\n### util.coffee\n\nContains a bunch of shared code that doesn't belong anywhere else.\n\n### dns_server.coffee\n\nPrimary used for development mode.  One should create a file called\n'dev' inside of /etc/resolver/ that should contain the following:\n\n    nameserver 127.0.0.1\n\nThis will allow the wildcard dns, *.myapp.dev, to resolve to localhost.\n\n### guide.coffee\n\nThe JS rewrite rules are contained in here.  The idea is to use this in\nthe future as the central place for all html & js rewrite rules &\nsubstitutions.  It should be a small file so that it's easy to\nunderstand.\n\n### html.coffee\n\nRewriter for html.  This defines the handler used by htmlparser 1.x\n\n### html.coffee\n\nRewriter for html.  This defines the handler used by htmlparser 2.x\n\n### js.coffee\n\nThis is the Caja equivalence for rewriting js using a DSL.\n\n### proxy_stream.coffee\n\nThis is used by app.coffee for filtering data from the remote machine.\n\n### xtnd.coffee\n\nThis is where all the work needs to be done.  The JS rewriter would\nconvert code that depends on the functions in this file.  It contains\nthe url conversions & property modifications.  Lots of stuff to be added\nhere soon.\n\n### files inside of client/\n\nThese are equivalent npm package files that are only served up by the\nclient, inside the browser.  They are packaged by the modul8 system.\n\n\n",
+  "readmeFilename": "README.md",
+  "_id": "xtendme@0.1.3",
+  "dist": {
+    "shasum": "97ad21d76a13a3390ffd015dfcc75fb98ff90c13"
+  },
+  "_from": "xtendme@",
+  "_resolved": "https://registry.npmjs.org/xtendme/-/xtendme-0.1.3.tgz"
+}
